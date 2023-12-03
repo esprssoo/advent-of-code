@@ -5,8 +5,7 @@ defmodule AdventOfCode.Year2023.Day1 do
   defp solve(input, flag \\ nil) do
     input
     |> Enum.flat_map(&[[left_digit(&1, flag), left_digit(String.reverse(&1), flag)]])
-    |> Enum.map(&List.to_integer/1)
-    |> Enum.sum()
+    |> Enum.reduce(0, fn num, acc -> List.to_integer(num) + acc end)
   end
 
   defp left_digit(digits, flag \\ nil)
