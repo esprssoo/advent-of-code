@@ -92,11 +92,11 @@ defmodule AdventOfCode.Year2023.Day3 do
     ]
   end
 
-  defp adjacent_numbers({x0, y0}, numbers) do
-    for y <- (y0 - 1)..(y0 + 1),
-        x <- x0..(x0 + 1),
-        {{x_range, y0p}, num} <- numbers,
-        x in x_range and y == y0p,
+  defp adjacent_numbers({x, y}, numbers) do
+    for y <- (y - 1)..(y + 1),
+        x <- x..(x + 1),
+        {{x_range, y_num}, num} <- numbers,
+        x in x_range and y == y_num,
         uniq: true do
       num
     end

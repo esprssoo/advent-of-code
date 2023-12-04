@@ -4,35 +4,28 @@ defmodule AdventOfCode.Year2023.Day1 do
 
   defp solve(input, flag \\ nil) do
     input
-    |> Enum.flat_map(&[[left_digit(&1, flag), left_digit(String.reverse(&1), flag)]])
+    |> Enum.flat_map(fn item ->
+      [[left_digit(item, flag), left_digit(String.reverse(item), flag, :reverse)]]
+    end)
     |> Enum.reduce(0, fn num, acc -> List.to_integer(num) + acc end)
   end
 
-  defp left_digit(digits, flag \\ nil)
-  defp left_digit(<<digit, _::binary>>, _) when digit in ?1..?9, do: digit
-  defp left_digit(<<_, rest::binary>>, nil), do: left_digit(rest)
+  @word_nums ~w(one two three four five six seven eight nine)
+  @word_nums_reverse Enum.map(@word_nums, &String.reverse/1)
 
-  defp left_digit(text, :spelled) do
-    case text do
-      "one" <> _ -> ?1
-      "eno" <> _ -> ?1
-      "two" <> _ -> ?2
-      "owt" <> _ -> ?2
-      "three" <> _ -> ?3
-      "eerht" <> _ -> ?3
-      "four" <> _ -> ?4
-      "ruof" <> _ -> ?4
-      "five" <> _ -> ?5
-      "evif" <> _ -> ?5
-      "six" <> _ -> ?6
-      "xis" <> _ -> ?6
-      "seven" <> _ -> ?7
-      "neves" <> _ -> ?7
-      "eight" <> _ -> ?8
-      "thgie" <> _ -> ?8
-      "nine" <> _ -> ?9
-      "enin" <> _ -> ?9
-      <<_, rest::binary>> -> left_digit(rest, :spelled)
-    end
+  defp left_digit(digits, flag \\ nil, reverse \\ nil)
+  defp left_digit(<<digit, _::binary>>, _, _) when digit in ?1..?9, do: digit
+  defp left_digit(<<_, rest::binary>>, nil, _), do: left_digit(rest)
+
+  for {word, idx} <- Enum.with_index(@word_nums) do
+    defp left_digit(<<unquote(word), _::binary>>, :spelled, _),
+      do: Integer.to_charlist(unquote(idx) + 1) |> List.first()
   end
+
+  for {word, idx} <- Enum.with_index(@word_nums_reverse) do
+    defp left_digit(<<unquote(word), _::binary>>, :spelled, :reverse),
+      do: Integer.to_charlist(unquote(idx) + 1) |> List.first()
+  end
+
+  defp left_digit(<<_, rest::binary>>, :spelled, reverse), do: left_digit(rest, :spelled, reverse)
 end
