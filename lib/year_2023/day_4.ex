@@ -2,7 +2,12 @@ defmodule AdventOfCode.Year2023.Day4 do
   def part_1(input) do
     parse(input)
     |> winnings()
-    |> points()
+    |> Enum.reduce(0, fn winning_set, total ->
+      case MapSet.size(winning_set) do
+        0 -> total
+        size -> 2 ** (size - 1) + total
+      end
+    end)
   end
 
   def part_2(input) do
@@ -13,6 +18,7 @@ defmodule AdventOfCode.Year2023.Day4 do
     |> Enum.map(fn {winnings, idx} -> {idx, {MapSet.size(winnings), 1}} end)
     |> Map.new()
     |> calculate_copies()
+    |> Enum.reduce(0, fn {_, {_, count}}, acc -> count + acc end)
   end
 
   defp parse(input) do
@@ -47,15 +53,5 @@ defmodule AdventOfCode.Year2023.Day4 do
           {points, count + elem(winnings[idx], 1)}
         end)
     end
-    |> Enum.reduce(0, fn {_, {_, count}}, acc -> count + acc end)
-  end
-
-  defp points(winnings) do
-    Enum.reduce(winnings, 0, fn winning_set, total ->
-      case MapSet.size(winning_set) do
-        0 -> total
-        size -> 2 ** (size - 1) + total
-      end
-    end)
   end
 end
