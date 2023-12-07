@@ -50,4 +50,14 @@ defmodule AdventOfCodeTest do
       # assert AdventOfCode.Year2023.Day5.part_2(load_input_lines("day_5")) == nil
     end
   end
+
+  describe "day 6" do
+    test "part 1" do
+      assert AdventOfCode.Year2023.Day6.part_1(load_input_lines("day_6")) == nil
+    end
+
+    test "part 2" do
+      assert AdventOfCode.Year2023.Day6.part_2(load_input_lines("day_6")) == nil
+    end
+  end
 end
